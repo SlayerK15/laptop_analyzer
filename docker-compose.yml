@@ -1,0 +1,38 @@
+networks:
+  laptop-net:
+    driver: bridge
+
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/laptop_specs
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - laptop-net
+    restart: unless-stopped
+  
+  mongo:
+    image: slayerop15/mongodb-laptops:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - laptop-net
+    healthcheck:
+      test: mongosh --eval "db.adminCommand('ping')" || exit 1
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+
+volumes:
+  mongodb_data:

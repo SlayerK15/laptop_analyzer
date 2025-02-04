@@ -1,0 +1,108 @@
+<!-- Redesigned edit.html with Save & Next Button and Page Retention -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Entry</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        label {
+            width: 100%;
+            text-align: left;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+        }
+        button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+        }
+        .save {
+            background: #28A745;
+            margin-right: 5px;
+        }
+        .save:hover {
+            background: #218838;
+        }
+        .save-next {
+            background: #007BFF;
+            margin-right: 5px;
+        }
+        .save-next:hover {
+            background: #0056b3;
+        }
+        .cancel {
+            background: #DC3545;
+            margin-left: 5px;
+        }
+        .cancel:hover {
+            background: #C82333;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const params = new URLSearchParams(window.location.search);
+            const page = params.get("page");
+            document.getElementById("return-link").href = "/?page=" + (page || 1);
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Entry</h1>
+        <form method="post">
+            {% for key, value in row.items() %}
+            <label>{{ key }}:</label>
+            <input type="text" name="{{ key }}" value="{{ value if value != 'nan' else '' }}">
+            {% endfor %}
+            <div class="buttons">
+                <button type="submit" class="save"><i class="fas fa-save"></i> Save</button>
+                <button type="submit" name="save_next" value="1" class="save-next"><i class="fas fa-forward"></i> Save & Next</button>
+                <a id="return-link" class="cancel"><i class="fas fa-times"></i> Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
